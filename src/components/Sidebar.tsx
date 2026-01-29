@@ -129,7 +129,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </div>
                 )}
                 <div className="text-[10px] text-[#edf2f4]/30 text-center font-medium tracking-wider uppercase">
-                    ArchiGen v0.1 • Gemini 3 Pro
+                    Gravis AI v0.1 • Gemini 3 Pro
                 </div>
             </div>
         </div>
