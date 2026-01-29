@@ -17,17 +17,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
-
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email as string }
-        });
-
-        if (user && credentials.password === "password") {
-          return user;
+        console.log("Authorize called with:", { email: credentials?.email }); // Debug
+        if (!credentials?.email || !credentials?.password) {
+          console.log("Missing credentials");
+          return null;
         }
 
-        return null;
+        try {
+          console.log("Querying DB for user...");
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email as string }
+          });
+          console.log("DB User result:", user);
+
+          if (user && credentials.password === "password") {
+            console.log("User verified!");
+            return user;
+          }
+
+          console.log("Invalid credentials or user not found");
+          return null;
+        } catch (e) {
+          console.error("Authorize error:", e);
+          return null;
+        }
       },
     }),
   ],

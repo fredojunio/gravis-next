@@ -7,11 +7,14 @@ const prismaClientSingleton = () => {
     if (!connectionString) {
         throw new Error("DATABASE_URL is not defined in environment variables");
     }
-    console.log("DB Connection String:", connectionString.replace(/:[^:]+@/, ":****@")); // Debug log
+    // Debug logging to verify what Next.js runtime sees
+    const masked = connectionString.replace(/:[^:]+@/, ":****@");
+    // Parse connection string manually to ensure correct params for pg driver in Next.js
+    const url = new URL(connectionString);
+    console.log("[DB] Connecting as user:", url.username); // Debug log
 
-    const pool = new Pool({
-        connectionString
-    });
+    // Use the same simple approach that works in seed.js
+    const pool = new Pool({ connectionString });
 
     const adapter = new PrismaPg(pool);
     return new PrismaClient({ adapter });

@@ -4,22 +4,34 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { registerUser } from '@/lib/actions/authActions';
+
 export default function SignUpPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
 
-        // Simulate API call
-        setTimeout(() => {
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("password", password);
+
+        const result = await registerUser(formData);
+
+        if (result.error) {
+            setError(result.error);
             setLoading(false);
+        } else {
             router.push('/auth/signin');
-        }, 1500);
+        }
     };
 
     return (
@@ -40,6 +52,11 @@ export default function SignUpPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+                    {error && (
+                        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm text-center">
+                            {error}
+                        </div>
+                    )}
                     <div>
                         <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">Full Name</label>
                         <input
