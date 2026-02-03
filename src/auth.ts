@@ -3,13 +3,14 @@ import authConfig from "./auth.config";
 import prisma from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
-  ...authConfig,
   providers: [
-    ...authConfig.providers.filter(p => p.id !== "credentials"),
+    Google,
     Credentials({
       name: "Credentials",
       credentials: {
@@ -17,25 +18,28 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("Authorize called with:", { email: credentials?.email }); // Debug
         if (!credentials?.email || !credentials?.password) {
-          console.log("Missing credentials");
           return null;
         }
 
         try {
-          console.log("Querying DB for user...");
           const user = await prisma.user.findUnique({
             where: { email: credentials.email as string }
-          });
-          console.log("DB User result:", user);
+          }) as any;
 
-          if (user && credentials.password === "password") {
-            console.log("User verified!");
+          if (!user || !user.password) {
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
+
+          if (isValid) {
             return user;
           }
 
-          console.log("Invalid credentials or user not found");
           return null;
         } catch (e) {
           console.error("Authorize error:", e);
