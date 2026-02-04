@@ -3,14 +3,12 @@ import authConfig from "./auth.config";
 import prisma from "@/lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from "next-auth/providers/credentials";
-import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: { strategy: "jwt" },
   providers: [
-    Google,
     Credentials({
       name: "Credentials",
       credentials: {

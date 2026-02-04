@@ -1,12 +1,9 @@
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
-import Google from "next-auth/providers/google";
-
 // Notice this is just a regular object, not calling NextAuth()
 export default {
     providers: [
-        Google,
         Credentials({
             name: "Credentials",
             credentials: {

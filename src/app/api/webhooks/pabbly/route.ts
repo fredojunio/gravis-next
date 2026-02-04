@@ -33,28 +33,20 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "User already exists", userId: existingUser.id }, { status: 200 });
         }
 
-        // 4. Generate Random Password
-        // Requirements: 8+ chars, 1 Capital, 1 Number
-        const tempPassword = crypto.randomBytes(8).toString('hex') + "A1";
-        const hashedPassword = await bcrypt.hash(tempPassword, 10);
-
-        // 5. Create User
+        // 4. Create User (without password)
         const newUser = await prisma.user.create({
             data: {
                 email,
                 name: name || email.split('@')[0],
-                password: hashedPassword,
+                password: null, // User will set this via forgot password
             } as any
         });
 
-        // 6. Return Success (In real world, you might send an email here)
+        // 5. Return Success
         return NextResponse.json({
             success: true,
             userId: newUser.id,
-            message: "User created successfully",
-            // Note: In production, don't return the raw password in the response if Pabbly logs it.
-            // But since the user asked for "generated password", providing it for Pabbly to send to the user via email.
-            tempPassword: tempPassword
+            message: "User created. They should now use the 'Forgot Password' feature to set their password.",
         }, { status: 201 });
 
     } catch (error) {

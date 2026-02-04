@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, use } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-import { registerUser } from '@/lib/actions/authActions';
+import { resetPassword } from '@/lib/actions/passwordResetActions';
 import PasswordStrength from '@/components/auth/PasswordStrength';
 
-export default function SignUpPage() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
+export default function ResetPasswordPage({ params }: { params: Promise<{ token: string }> }) {
+    const { token } = use(params);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -27,24 +26,40 @@ export default function SignUpPage() {
         setLoading(true);
         setError('');
 
-        const formData = new FormData();
-        formData.append("name", name);
-        formData.append("email", email);
-        formData.append("password", password);
-
-        const result = await registerUser(formData);
+        const result = await resetPassword(token, password);
 
         if (result.error) {
             setError(result.error);
             setLoading(false);
         } else {
-            router.push('/auth/signin');
+            setSuccess(true);
+            setTimeout(() => {
+                router.push('/auth/signin');
+            }, 3000);
         }
     };
 
+    if (success) {
+        return (
+            <div className="min-h-screen w-full bg-[#161a1d] flex items-center justify-center p-4 font-sans relative overflow-hidden">
+                <div className="w-full max-w-md bg-white/[0.03] backdrop-blur-xl border border-white/10 p-10 rounded-[32px] shadow-2xl relative z-10 text-center">
+                    <div className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h1 className="text-2xl font-bold text-white mb-2">Password Reset Successful</h1>
+                    <p className="text-white/40 text-sm mb-8">You can now sign in with your new password. Redirecting to login...</p>
+                    <Link href="/auth/signin" className="text-blue-400 font-semibold hover:text-blue-300">
+                        Go to Sign In
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="min-h-screen w-full bg-[#161a1d] flex items-center justify-center p-4 font-sans relative overflow-hidden">
-            {/* Background Decor */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 blur-[100px] rounded-full pointer-events-none"></div>
 
             <div className="w-full max-w-md bg-white/[0.03] backdrop-blur-xl border border-white/10 p-10 rounded-[32px] shadow-2xl relative z-10">
@@ -55,8 +70,8 @@ export default function SignUpPage() {
                         </div>
                         <span className="text-xl font-bold text-white tracking-tight">GRAVIS AI</span>
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Create Account</h1>
-                    <p className="text-white/40 text-sm">Join the next generation of architects</p>
+                    <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Set New Password</h1>
+                    <p className="text-white/40 text-sm">Please enter your new secure password</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -65,30 +80,9 @@ export default function SignUpPage() {
                             {error}
                         </div>
                     )}
+
                     <div>
-                        <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">Full Name</label>
-                        <input
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
-                            placeholder="John Doe"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">Email Address</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
-                            placeholder="user@example.com"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">Password</label>
+                        <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">New Password</label>
                         <input
                             type="password"
                             value={password}
@@ -99,6 +93,7 @@ export default function SignUpPage() {
                         />
                         <PasswordStrength password={password} />
                     </div>
+
                     <div>
                         <label className="block text-xs font-semibold text-white/40 uppercase tracking-widest mb-2 ml-1">Confirm Password</label>
                         <input
@@ -122,19 +117,10 @@ export default function SignUpPage() {
                         {loading ? (
                             <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
                         ) : (
-                            'Create Account'
+                            'Reset Password'
                         )}
                     </button>
                 </form>
-
-                <div className="mt-8 pt-8 border-t border-white/5 text-center">
-                    <p className="text-white/40 text-sm">
-                        Already have an account?{' '}
-                        <Link href="/auth/signin" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors">
-                            Sign In
-                        </Link>
-                    </p>
-                </div>
             </div>
         </div>
     );
