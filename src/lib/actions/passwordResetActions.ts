@@ -3,6 +3,7 @@
 import prisma from "@/lib/db";
 import crypto from "crypto";
 import bcrypt from "bcryptjs";
+import { sendPasswordResetEmail } from "@/lib/mail";
 
 /**
  * Request a password reset. Calculates a token and saves it.
@@ -28,11 +29,8 @@ export async function requestPasswordReset(email: string) {
             create: { email, token, expires }
         });
 
-        // Construct reset link
-        const resetLink = `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/auth/reset-password/${token}`;
-
-        // TODO: Send email
-        console.log(`[PASSWORD RESET] Link for ${email}: ${resetLink}`);
+        // Send email
+        await sendPasswordResetEmail(email, token);
 
         return { success: true };
     } catch (e) {

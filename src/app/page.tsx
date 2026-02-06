@@ -38,7 +38,7 @@ export default function LandingPage() {
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">Speed of Thought.</span>
         </h1>
         <p className="text-xl md:text-2xl text-white/50 mb-12 max-w-2xl mx-auto leading-relaxed">
-          ArchiGen is your intelligent partner for professional architectural rendering, restyling, and concept generation. Powered by advanced AI.
+          Gravis AI is your intelligent partner for professional architectural rendering, restyling, and concept generation. Powered by advanced AI.
         </p>
 
         <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
