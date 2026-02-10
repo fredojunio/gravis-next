@@ -2,13 +2,17 @@ import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const domain = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-const fromEmail = process.env.EMAIL_FROM || 'onboarding@resend.dev';
+const fromEmail = process.env.EMAIL_FROM
+    ? `Gravis Edu AI <${process.env.EMAIL_FROM}>`
+    : 'onboarding@resend.dev';
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
     const resetLink = `${domain}/auth/reset-password/${token}`;
 
     try {
-        await resend.emails.send({
+        console.log(`Attempting to send password reset email to: ${email} from: ${fromEmail}`);
+
+        const { data, error } = await resend.emails.send({
             from: fromEmail,
             to: email,
             subject: 'Reset your password',
@@ -24,9 +28,16 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
                 </div>
             `
         });
-        return { success: true };
+
+        if (error) {
+            console.error("Resend API error:", error);
+            return { error: error.message };
+        }
+
+        console.log("Resend response data:", data);
+        return { success: true, data };
     } catch (error) {
-        console.error("Error sending email:", error);
+        console.error("Caught error sending email:", error);
         return { error: "Failed to send email" };
     }
 };
