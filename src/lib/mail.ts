@@ -15,16 +15,31 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
         const { data, error } = await resend.emails.send({
             from: fromEmail,
             to: email,
-            subject: 'Reset your password',
+            subject: 'Reset your password for Gravis EDU',
             html: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-                    <h2 style="color: #333;">Password Reset Request</h2>
-                    <p>You requested a password reset for your Gravis account. Click the button below to set a new password:</p>
-                    <a href="${resetLink}" style="display: inline-block; padding: 12px 24px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0;">Reset Password</a>
-                    <p>This link will expire in 1 hour.</p>
-                    <p>If you didn't request this, you can safely ignore this email.</p>
-                    <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
-                    <p style="font-size: 12px; color: #666;">Sent by Gravis Edu AI</p>
+                <div style="font-family: 'Inter', sans-serif; max-width: 500px; margin: 0 auto; background-color: #4338ca; border-radius: 20px; color: white; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
+                    <div style="padding: 40px 30px; text-align: center;">
+                        <div style="margin-bottom: 20px;">
+                            <span style="font-size: 24px; font-weight: 800; letter-spacing: 2px;">GRAVIS</span>
+                        </div>
+                        
+                        <h1 style="font-size: 24px; font-weight: 700; margin-bottom: 20px; color: white;">Hi there,</h1>
+                        
+                        <p style="font-size: 16px; line-height: 1.6; margin-bottom: 30px; color: rgba(255,255,255,0.9);">
+                            As part of your enrollment, we've created an account for you on Gravis EDU. Please set your password to get started.
+                        </p>
+                        
+                        <div style="margin-bottom: 30px;">
+                            <a href="${resetLink}" style="display: inline-block; padding: 16px 36px; background-color: #ff6022; color: white; text-decoration: none; border-radius: 12px; font-weight: 800; font-size: 16px; box-shadow: 0 4px 12px rgba(255, 96, 34, 0.3);">
+                                Set Up Your Password
+                            </a>
+                        </div>
+                        
+                        <p style="font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 40px; text-align: left;">
+                            Best regards,<br>
+                            <span style="font-weight: 700; color: white;">Gravis EDU</span>
+                        </p>
+                    </div>
                 </div>
             `
         });
