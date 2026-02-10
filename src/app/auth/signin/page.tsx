@@ -101,14 +101,14 @@ export default function SignInPage() {
                     </button>
                 </form>
 
-                <div className="mt-8 pt-8 border-t border-white/5 text-center">
+                {/* <div className="mt-8 pt-8 border-t border-white/5 text-center">
                     <p className="text-white/40 text-sm">
                         Don't have an account?{' '}
                         <Link href="/auth/signup" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors">
                             Create an account
                         </Link>
                     </p>
-                </div>
+                </div> */}
             </div>
         </div>
     );

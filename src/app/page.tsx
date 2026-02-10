@@ -22,9 +22,9 @@ export default function LandingPage() {
           <Link href="/auth/signin" className="px-6 py-2 rounded-full border border-white/10 hover:bg-white/5 transition-all text-sm font-medium">
             Sign In
           </Link>
-          <Link href="/auth/signup" className="px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-500 transition-all text-sm font-medium shadow-lg shadow-blue-600/20">
+          {/* <Link href="/auth/signup" className="px-6 py-2 rounded-full bg-blue-600 hover:bg-blue-500 transition-all text-sm font-medium shadow-lg shadow-blue-600/20">
             Get Started
-          </Link>
+          </Link> */}
         </div>
       </nav>
 
