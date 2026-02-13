@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function SignInPage() {
     const [email, setEmail] = useState('');
@@ -44,9 +45,13 @@ export default function SignInPage() {
             <div className="w-full max-w-md bg-white/[0.03] backdrop-blur-xl border border-white/10 p-10 rounded-[32px] shadow-2xl relative z-10">
                 <div className="text-center mb-10">
                     <Link href="/" className="inline-flex items-center gap-2 mb-8 group">
-                        <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <span className="text-white text-sm font-bold italic">G</span>
-                        </div>
+                        <Image
+                            src="/logo/logo.png"
+                            alt="Gravis AI Logo"
+                            width={32}
+                            height={32}
+                            className="rounded-lg shadow-lg"
+                        />
                         <span className="text-xl font-bold text-white tracking-tight">GRAVIS AI</span>
                     </Link>
                     <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Welcome Back</h1>

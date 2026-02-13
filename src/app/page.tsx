@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function LandingPage() {
   return (
@@ -12,12 +13,16 @@ export default function LandingPage() {
 
       {/* Navigation */}
       <nav className="absolute top-0 w-full p-8 flex justify-between items-center max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <span className="text-xl font-bold italic">G</span>
-          </div>
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/logo/logo.png"
+            alt="Gravis AI Logo"
+            width={40}
+            height={40}
+            className="rounded-lg shadow-lg"
+          />
           <span className="text-2xl font-bold tracking-tight">GRAVIS <span className="text-blue-500">AI</span></span>
-        </div>
+        </Link>
         <div className="flex gap-8 items-center">
           <Link href="/auth/signin" className="px-6 py-2 rounded-full border border-white/10 hover:bg-white/5 transition-all text-sm font-medium">
             Sign In

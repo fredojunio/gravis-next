@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { useSession, signOut } from 'next-auth/react';
 import { AppMode, ChatSession } from '../types';
 
@@ -35,12 +36,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {/* Branding: GRAVIS AI with Logo */}
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-3">
-                        {/* Logo SVG - Abstract "G" Orb */}
-                        <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-                            <circle cx="50" cy="50" r="50" fill="#4137be" />
-                            <path d="M70 25C80 35 85 55 75 70C65 85 40 85 30 75C40 80 55 75 60 60C65 45 55 35 45 35C35 35 25 45 25 60C25 40 35 25 55 20C60 18 65 20 70 25Z" fill="#161a1d" />
-                            <ellipse cx="40" cy="65" rx="10" ry="6" transform="rotate(-30 40 65)" fill="#161a1d" />
-                        </svg>
+                        <Image
+                            src="/logo/logo.png"
+                            alt="Gravis AI Logo"
+                            width={40}
+                            height={40}
+                            className="shrink-0 rounded-lg shadow-lg"
+                        />
                         <h1 className="text-3xl font-bold text-[#4137be] tracking-widest font-sans">
                             GRAVIS
                         </h1>
