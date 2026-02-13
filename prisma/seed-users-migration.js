@@ -1,8 +1,15 @@
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcryptjs'
-import * as dotenv from 'dotenv'
+const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
+const dotenv = require('dotenv');
 
-dotenv.config({ path: '.env.prod' })
+dotenv.config({ path: '.env.prod' });
+
+console.log("DATABASE_URL present:", !!process.env.DATABASE_URL);
+
+if (!process.env.DATABASE_URL) {
+    console.error("DATABASE_URL is missing!");
+    process.exit(1);
+}
 
 const prisma = new PrismaClient({
     datasources: {

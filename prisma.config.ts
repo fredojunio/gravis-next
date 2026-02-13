@@ -2,16 +2,16 @@ import "dotenv/config";
 import { config } from "dotenv";
 import { defineConfig } from "prisma/config";
 
-// Load .env.local if it exists (standard for Next.js)
-config({ path: ".env.local", override: true });
+// Load .env.prod if it exists, otherwise .env.local
+config({ path: ".env.prod", override: true });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
-    seed: "/opt/homebrew/bin/node prisma/seed.js",
+    seed: "npx tsx prisma/seed-users-migration.ts",
   },
   datasource: {
-    url: process.env["DIRECT_URL"] || process.env["DATABASE_URL"],
+    url: process.env["DATABASE_URL"],
   },
 });
