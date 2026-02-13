@@ -6,12 +6,6 @@ import { defineConfig } from "prisma/config";
 config({ path: ".env.prod", override: true });
 
 export default defineConfig({
+  earlyAccess: true,
   schema: "prisma/schema.prisma",
-  migrations: {
-    path: "prisma/migrations",
-    seed: "npx tsx prisma/seed-users-migration.ts",
-  },
-  datasource: {
-    url: process.env["DATABASE_URL"],
-  },
-});
+} as any);
