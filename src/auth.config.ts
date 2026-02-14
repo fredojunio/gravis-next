@@ -20,10 +20,20 @@ export default {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
             const isOnApp = nextUrl.pathname.startsWith("/app");
+
+            // Allow public assets to bypass the redirect logic
+            const isPublicAsset =
+                nextUrl.pathname.startsWith("/logo/") ||
+                nextUrl.pathname.startsWith("/images/") ||
+                nextUrl.pathname.endsWith(".png") ||
+                nextUrl.pathname.endsWith(".jpg") ||
+                nextUrl.pathname.endsWith(".svg") ||
+                nextUrl.pathname.endsWith(".ico");
+
             if (isOnApp) {
                 if (isLoggedIn) return true;
                 return false;
-            } else if (isLoggedIn) {
+            } else if (isLoggedIn && !isPublicAsset) {
                 return Response.redirect(new URL("/app", nextUrl));
             }
             return true;
