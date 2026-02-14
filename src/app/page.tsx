@@ -35,7 +35,7 @@ export default function LandingPage() {
 
       {/* Hero Content */}
       <div className="z-10 text-center px-4 max-w-4xl">
-        <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 text-blue-400 text-xs font-semibold tracking-widest uppercase">
+        <div className="hidden md:inline-block mb-6 px-4 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/5 text-blue-400 text-xs font-semibold tracking-widest uppercase">
           The Future of Architectural Visualization
         </div>
         <h1 className="text-6xl md:text-8xl font-bold mb-8 tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 leading-tight">
