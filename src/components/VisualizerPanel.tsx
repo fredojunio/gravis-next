@@ -96,25 +96,25 @@ const VisualizerPanel: React.FC<VisualizerPanelProps> = ({ initialPrompt, state,
 
                 {/* Controls */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="md:col-span-2 space-y-4">
+                    <div className="md:col-span-2 space-y-4 order-2 md:order-1">
                         <div>
                             <label className="block text-xs font-semibold text-[#edf2f4]/60 mb-2 uppercase tracking-wider">Prompt</label>
                             <textarea
                                 value={state.prompt}
                                 onChange={(e) => updateState({ prompt: e.target.value })}
-                                className="w-full bg-[#1e2327] border border-[#2d343a] rounded-xl p-4 text-[#edf2f4] focus:ring-2 focus:ring-[#4137be] focus:outline-none min-h-[120px] resize-none"
+                                className="w-full bg-[#1e2327] border border-[#2d343a] rounded-xl p-4 text-[#edf2f4] focus:ring-2 focus:ring-[#4137be] focus:outline-none min-h-[120px] resize-none text-sm md:text-base"
                                 placeholder="Describe your architectural vision in detail..."
                             />
                         </div>
                     </div>
 
-                    <div className="space-y-6">
+                    <div className="space-y-4 md:space-y-6 order-1 md:order-2">
                         <div>
                             <label className="block text-xs font-semibold text-[#edf2f4]/60 mb-2 uppercase tracking-wider">Aspect Ratio</label>
                             <select
                                 value={state.aspectRatio}
                                 onChange={(e) => updateState({ aspectRatio: e.target.value as AspectRatio })}
-                                className="w-full bg-[#1e2327] border border-[#2d343a] rounded-lg p-3 text-[#edf2f4] focus:ring-2 focus:ring-[#4137be] outline-none"
+                                className="w-full bg-[#1e2327] border border-[#2d343a] rounded-lg p-3 text-[#edf2f4] focus:ring-2 focus:ring-[#4137be] outline-none text-sm md:text-base"
                             >
                                 {Object.values(AspectRatio).map((ratio) => (
                                     <option key={ratio} value={ratio}>{ratio}</option>
@@ -132,7 +132,7 @@ const VisualizerPanel: React.FC<VisualizerPanelProps> = ({ initialPrompt, state,
                                         key={size}
                                         onClick={() => updateState({ imageSize: size })}
                                         disabled={state.modelTier === ModelTier.FLASH_2_5}
-                                        className={`py-2 rounded-lg text-sm font-medium transition-all ${state.imageSize === size
+                                        className={`py-2 rounded-lg text-xs md:text-sm font-medium transition-all ${state.imageSize === size
                                             ? 'bg-[#4137be] text-[#edf2f4] shadow-lg shadow-[#4137be]/50'
                                             : 'bg-[#1e2327] text-[#edf2f4]/60 hover:bg-[#2d343a]'
                                             }`}
@@ -147,7 +147,7 @@ const VisualizerPanel: React.FC<VisualizerPanelProps> = ({ initialPrompt, state,
                         <button
                             onClick={handleGenerate}
                             disabled={isGenerating || !state.prompt}
-                            className="w-full bg-[#4137be] hover:bg-[#322a9e] disabled:opacity-50 text-white py-4 rounded-xl font-bold shadow-xl shadow-[#4137be]/30 transition-all transform active:scale-95 flex items-center justify-center gap-2"
+                            className="w-full bg-[#4137be] hover:bg-[#322a9e] disabled:opacity-50 text-white py-3 md:py-4 rounded-xl font-bold shadow-xl shadow-[#4137be]/30 transition-all transform active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base"
                         >
                             {isGenerating ? (
                                 <>

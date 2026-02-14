@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/components/Sidebar';
+import Image from 'next/image';
 import AssistantPanel from '@/components/AssistantPanel';
 import VisualizerPanel from '@/components/VisualizerPanel';
 import RestylerPanel from '@/components/RestylerPanel';
@@ -46,6 +47,7 @@ export default function Home() {
   const [restylerState, setRestylerState] = useState<RestylerState>(DEFAULT_RESTYLER_STATE);
   const [mediaAssets, setMediaAssets] = useState<MediaAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   // Load sessions from DB on mount
   useEffect(() => {
@@ -226,8 +228,12 @@ export default function Home() {
     );
   }
 
+
+
+  // ... (existing code)
+
   return (
-    <div className="flex h-screen w-full bg-[#161a1d] overflow-hidden font-sans">
+    <div className="flex h-screen w-full bg-[#161a1d] overflow-hidden font-sans flex-col md:flex-row">
       <Sidebar
         currentMode={currentMode}
         setMode={setCurrentMode}
@@ -236,45 +242,69 @@ export default function Home() {
         onNewChat={handleNewChat}
         onSelectSession={(id) => { setCurrentSessionId(id); setCurrentMode(AppMode.ASSISTANT); }}
         onDeleteSession={handleDeleteSession}
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
       />
 
-      <main className="flex-1 h-full overflow-hidden relative">
-        {currentMode === AppMode.ASSISTANT && currentSession && (
-          <AssistantPanel
-            setGeneratedPrompt={handleSetGeneratedPrompt}
-            switchToVisualizer={() => setCurrentMode(AppMode.VISUALIZER)}
-            messages={currentSession.messages}
-            setMessages={(msgs) => updateCurrentSession(msgs)}
-            builderData={currentSession.builderData}
-            setBuilderData={(data) => updateCurrentSession(currentSession.messages, data)}
-          />
-        )}
+      <main className="flex-1 h-full overflow-hidden relative flex flex-col">
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-[#2d343a] bg-[#161a1d]">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/logo/logo_white.png"
+              alt="Gravis AI Logo"
+              width={140}
+              height={32}
+              className="shrink-0 mb-2"
+              priority
+            />
+          </div>
+          <button
+            onClick={() => setIsMobileSidebarOpen(true)}
+            className="text-[#edf2f4] p-2 hover:bg-[#1e2327] rounded-lg transition-colors"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+        </div>
 
-        {currentMode === AppMode.VISUALIZER && (
-          <VisualizerPanel
-            initialPrompt={visualizerState.prompt}
-            state={visualizerState}
-            setState={setVisualizerState}
-            currentSessionId={currentSessionId}
-            onAssetCreated={handleAddMediaAsset}
-          />
-        )}
+        <div className="flex-1 overflow-hidden relative">
+          {currentMode === AppMode.ASSISTANT && currentSession && (
+            <AssistantPanel
+              setGeneratedPrompt={handleSetGeneratedPrompt}
+              switchToVisualizer={() => setCurrentMode(AppMode.VISUALIZER)}
+              messages={currentSession.messages}
+              setMessages={(msgs) => updateCurrentSession(msgs)}
+              builderData={currentSession.builderData}
+              setBuilderData={(data) => updateCurrentSession(currentSession.messages, data)}
+            />
+          )}
 
-        {currentMode === AppMode.RESTYLER && (
-          <RestylerPanel
-            state={restylerState}
-            setState={setRestylerState}
-            currentSessionId={currentSessionId}
-            onAssetCreated={handleAddMediaAsset}
-          />
-        )}
+          {currentMode === AppMode.VISUALIZER && (
+            <VisualizerPanel
+              initialPrompt={visualizerState.prompt}
+              state={visualizerState}
+              setState={setVisualizerState}
+              currentSessionId={currentSessionId}
+              onAssetCreated={handleAddMediaAsset}
+            />
+          )}
 
-        {currentMode === AppMode.MEDIA && (
-          <MediaLibraryPanel
-            assets={mediaAssets}
-            onDelete={handleDeleteMediaAsset}
-          />
-        )}
+          {currentMode === AppMode.RESTYLER && (
+            <RestylerPanel
+              state={restylerState}
+              setState={setRestylerState}
+              currentSessionId={currentSessionId}
+              onAssetCreated={handleAddMediaAsset}
+            />
+          )}
+
+          {currentMode === AppMode.MEDIA && (
+            <MediaLibraryPanel
+              assets={mediaAssets}
+              onDelete={handleDeleteMediaAsset}
+            />
+          )}
+        </div>
       </main>
     </div>
   );

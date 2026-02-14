@@ -201,22 +201,22 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
     return (
         <div className="flex flex-col h-full bg-[#161a1d]">
             {/* Toolbar Header */}
-            <div className="px-6 py-3 border-b border-[#2d343a] flex justify-between items-center bg-[#161a1d]/50 backdrop-blur z-10">
+            <div className="px-4 md:px-6 py-3 border-b border-[#2d343a] flex flex-row justify-between items-center bg-[#161a1d]/50 backdrop-blur z-10 gap-4">
                 <div className="flex items-center gap-4">
-                    <h2 className="text-[#edf2f4] font-semibold">Architect Assistant</h2>
+                    <h2 className="text-[#edf2f4] font-semibold text-sm md:text-base">Architect Assistant</h2>
                     <button
                         onClick={() => setShowBuilder(!showBuilder)}
-                        className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${showBuilder ? 'bg-[#4137be] border-[#4137be] text-white' : 'bg-[#1e2327] border-[#2d343a] text-[#edf2f4]/70 hover:text-white'}`}
+                        className={`text-xs px-3 py-1.5 rounded-lg border transition-colors whitespace-nowrap ${showBuilder ? 'bg-[#4137be] border-[#4137be] text-white' : 'bg-[#1e2327] border-[#2d343a] text-[#edf2f4]/70 hover:text-white'}`}
                     >
-                        {showBuilder ? 'Close Prompt Builder' : 'Open Prompt Builder'}
+                        {showBuilder ? 'Close Builder' : 'Open Builder'}
                     </button>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-xs text-[#edf2f4]/60">Model:</span>
+                    <span className="text-xs text-[#edf2f4]/60 hidden md:inline">Model:</span>
                     <select
                         value={modelTier}
                         onChange={(e) => setModelTier(e.target.value as ModelTier)}
-                        className="bg-[#1e2327] text-[#edf2f4] text-xs border border-[#2d343a] rounded-lg px-2 py-1 focus:ring-1 focus:ring-[#4137be] outline-none"
+                        className="bg-[#1e2327] text-[#edf2f4] text-xs border border-[#2d343a] rounded-lg px-2 py-1 focus:ring-1 focus:ring-[#4137be] outline-none max-w-[100px] md:max-w-none"
                     >
                         {Object.values(ModelTier).map(t => (
                             <option key={t} value={t}>{t}</option>
@@ -225,13 +225,13 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
                 </div>
             </div>
 
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 flex overflow-hidden relative">
                 {/* Main Chat Area */}
                 <div className="flex-1 flex flex-col min-w-0">
-                    <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[90%] rounded-2xl p-4 ${msg.role === 'user'
+                                <div className={`max-w-[95%] md:max-w-[90%] rounded-2xl p-4 ${msg.role === 'user'
                                     ? 'bg-[#4137be] text-white shadow-md'
                                     : 'bg-[#1e2327] text-[#edf2f4] border border-[#2d343a]'
                                     }`}>
@@ -306,7 +306,7 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
                                 <span className={`w-4 h-4 rounded border flex items-center justify-center ${useMaps ? 'bg-[#fe5c24] border-[#fe5c24]' : 'border-[#2d343a]'}`}>
                                     {useMaps && <svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>}
                                 </span>
-                                Google Maps <span className="text-[10px] opacity-60 ml-1">(Requires 2.5 Flash)</span>
+                                Maps <span className="text-[10px] opacity-60 ml-1 hidden md:inline">(Requires 2.5 Flash)</span>
                             </label>
                         </div>
 
@@ -320,7 +320,7 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
                         )}
 
                         <div className="flex gap-2">
-                            <label className="p-3 text-[#edf2f4]/50 hover:text-[#4137be] cursor-pointer hover:bg-[#1e2327] rounded-xl transition-colors">
+                            <label className="p-3 text-[#edf2f4]/50 hover:text-[#4137be] cursor-pointer hover:bg-[#1e2327] rounded-xl transition-colors shrink-0">
                                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -332,22 +332,22 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
                                 disabled={showBuilder}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && !showBuilder && handleSend()}
-                                placeholder={showBuilder ? "Use the builder panel ->" : "Describe a design problem or ask for a prompt..."}
-                                className="flex-1 bg-[#1e2327] text-[#edf2f4] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#4137be] border border-[#2d343a] placeholder-[#edf2f4]/30 disabled:opacity-50"
+                                placeholder={showBuilder ? "Use builder..." : "Ask something..."}
+                                className="flex-1 bg-[#1e2327] text-[#edf2f4] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#4137be] border border-[#2d343a] placeholder-[#edf2f4]/30 disabled:opacity-50 text-sm md:text-base min-w-0"
                             />
                             {showBuilder ? (
                                 <button
                                     onClick={() => handleSend(constructPromptFromBuilder())}
                                     disabled={isLoading}
-                                    className="bg-[#fe5c24] hover:bg-[#ff7847] disabled:opacity-50 text-white px-6 py-3 rounded-xl font-medium transition-all shadow-lg"
+                                    className="bg-[#fe5c24] hover:bg-[#ff7847] disabled:opacity-50 text-white px-4 md:px-6 py-3 rounded-xl font-medium transition-all shadow-lg whitespace-nowrap text-sm md:text-base shrink-0"
                                 >
-                                    Generate Prompt
+                                    Generate
                                 </button>
                             ) : (
                                 <button
                                     onClick={() => handleSend()}
                                     disabled={isLoading || (!input && !selectedImage)}
-                                    className="bg-[#4137be] hover:bg-[#322a9e] disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-[#4137be]/20"
+                                    className="bg-[#4137be] hover:bg-[#322a9e] disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 md:px-6 py-3 rounded-xl font-medium transition-all shadow-lg shadow-[#4137be]/20 text-sm md:text-base shrink-0"
                                 >
                                     Send
                                 </button>
@@ -358,8 +358,14 @@ const AssistantPanel: React.FC<AssistantPanelProps> = ({
 
                 {/* Builder Panel */}
                 {showBuilder && (
-                    <div className="w-80 bg-[#161a1d] border-l border-[#2d343a] overflow-y-auto p-4 space-y-6 shrink-0 shadow-2xl z-20">
-                        <h3 className="text-sm font-bold text-[#edf2f4] uppercase tracking-wider mb-4 border-b border-[#2d343a] pb-2">Prompt Configuration</h3>
+                    <div className="fixed inset-0 z-50 md:static md:z-auto w-full md:w-80 bg-[#161a1d] border-l border-[#2d343a] overflow-y-auto p-4 space-y-6 shrink-0 shadow-2xl">
+                        <div className="flex justify-between items-center md:hidden mb-4 border-b border-[#2d343a] pb-2">
+                            <h3 className="text-sm font-bold text-[#edf2f4] uppercase tracking-wider">Configuration</h3>
+                            <button onClick={() => setShowBuilder(false)} className="text-[#edf2f4] p-2">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
+                        </div>
+                        <h3 className="text-sm font-bold text-[#edf2f4] uppercase tracking-wider mb-4 border-b border-[#2d343a] pb-2 hidden md:block">Prompt Configuration</h3>
 
                         {/* Section 1: Perintah & Objek */}
                         <div className="space-y-3">
